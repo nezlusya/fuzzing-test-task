@@ -1,0 +1,5 @@
+start:
+    JCC 1, , done
+    ADD x, 1, x
+done:
+    NOP , ,

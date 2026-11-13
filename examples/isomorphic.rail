@@ -1,0 +1,5 @@
+root:
+    JLE x, 5, finish
+    SUB x, 1, x
+finish:
+    NOP , ,

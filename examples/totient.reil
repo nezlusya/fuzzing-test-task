@@ -1,0 +1,49 @@
+; arg  = input n
+; ret  = result
+; reg0 = mutable n
+; reg1 = p
+; reg2 = quotient
+; reg3 = product
+; reg4 = remainder
+; reg5 = temporary
+
+entry:
+    STR arg, , ret
+    JLE arg, 0, done             ; if (n == 0) return 0
+
+    STR arg, , reg0
+    STR 2, , reg1               ; p = 2
+
+for_check:
+    DIV reg0, reg1, reg2         ; quotient = n / p
+    JG reg1, reg2, final_factor  ; exit if p > n / p
+
+    ; remainder = n - (n / p) * p
+    MUL reg2, reg1, reg3
+    SUB reg0, reg3, reg4
+    JG reg4, 0, for_increment    ; skip if n % p != 0
+
+    DIV ret, reg1, reg5
+    SUB ret, reg5, ret           ; result -= result / p
+
+while_check:
+    DIV reg0, reg1, reg2
+    MUL reg2, reg1, reg3
+    SUB reg0, reg3, reg4         ; remainder = n % p
+    JG reg4, 0, for_increment    ; exit while if remainder != 0
+
+    STR reg2, , reg0             ; n /= p
+    JCC 1, , while_check
+
+for_increment:
+    ADD reg1, 1, reg1            ; ++p
+    JCC 1, , for_check
+
+final_factor:
+    JLE reg0, 1, done            ; if (n <= 1) skip adjustment
+
+    DIV ret, reg0, reg5
+    SUB ret, reg5, ret           ; result -= result / n
+
+done:
+    NOP , ,

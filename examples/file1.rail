@@ -1,0 +1,5 @@
+start:
+    JG a, b, done
+    ADD x, 1, x
+done:
+    NOP , ,
